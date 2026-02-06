@@ -1,40 +1,45 @@
-import nodemailer, { type Transporter } from "nodemailer";
+import mailJet, { type Client } from "node-mailjet";
 
 class MailService {
-  private readonly GMAIL_USER = process.env.GMAIL_USER as string;
-  private readonly GMAIL_APP_PASSWORD = process.env
-    .GMAIL_APP_PASSWORD as string;
+  private readonly MJ_ACCESS = process.env.MJ_ACCESS as string;
+  private readonly MJ_SECRET = process.env.MJ_SECRET as string;
 
-  private readonly mailTransporter: Transporter;
+  private client: Client;
 
   constructor() {
-    if (!this.GMAIL_USER) {
-      throw new Error("GMAIL_USER is not defined");
+    if (!this.MJ_ACCESS) {
+      throw new Error("MJ_ACCESS is not defined");
     }
 
-    if (!this.GMAIL_APP_PASSWORD) {
-      throw new Error("GMAIL_APP_PASSWORD is not defined");
+    if (!this.MJ_SECRET) {
+      throw new Error("MJ_SECRET is not defined");
     }
 
-    this.mailTransporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: this.GMAIL_USER,
-        pass: this.GMAIL_APP_PASSWORD,
-      },
-    });
+    this.client = mailJet.apiConnect(this.MJ_ACCESS, this.MJ_SECRET);
   }
 
   sendVerificationMail = async (email: string, url: string) => {
     try {
-      await this.mailTransporter.sendMail({
-        from: "The app",
-        to: email,
-        subject: "Email verification",
-        html: `<p>To verify email click link: <a href="${url}">${url}</a></p>`,
+      this.client.post("send", { version: "v3.1" }).request({
+        Messages: [
+          {
+            From: {
+              Email: "kcnpoow@formygoals.xyz",
+              Name: "Email Verification",
+            },
+            To: [
+              {
+                Email: email,
+              },
+            ],
+            Subject: "Verify Your Email",
+            TextPart: `Please verify your email by clicking the link: ${url}`,
+            HTMLPart: `<p>Please verify your email by clicking the link:</p><a href="${url}">${url}</a>`,
+          },
+        ],
       });
     } catch (error) {
-      throw new Error("Error sending email");
+      throw error;
     }
   };
 }

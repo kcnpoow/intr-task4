@@ -10,8 +10,8 @@ import type { User } from "../models/user";
 import { mailService } from "./mail.service";
 
 class UserService {
-  private SALT: number = Number(process.env.SALT);
-  private CLIENT_URL = process.env.CLIENT_URL;
+  private readonly SALT: number = Number(process.env.SALT);
+  private readonly CLIENT_URL = process.env.CLIENT_URL;
 
   constructor() {
     if (!this.SALT) {
@@ -64,7 +64,7 @@ class UserService {
       );
 
       const verificationUrl = `${this.CLIENT_URL}/verify-email?token=${verificationToken}`;
-      mailService.sendVerificationMail(user.email, verificationUrl);
+      await mailService.sendVerificationMail(user.email, verificationUrl);
 
       const accessToken = tokenService.signAccessToken({ userId: user.id });
       const refreshToken = tokenService.signRefreshToken({ userId: user.id });

@@ -8,14 +8,14 @@ import { userRouter } from "./routes/user.router";
 import { errorMiddleware } from "./middlewares/error.middleware";
 
 const PORT = process.env.PORT || 3000;
-const SERVER_URL = process.env.CLIENT_URL;
+const CLIENT_URL = process.env.CLIENT_URL;
 
 const app = express();
 
 app.set("trust proxy", 1);
 app.use(
   cors({
-    origin: SERVER_URL,
+    origin: CLIENT_URL,
     credentials: true,
   }),
 );
