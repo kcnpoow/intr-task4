@@ -64,7 +64,7 @@ class UserService {
       );
 
       const verificationUrl = `${this.CLIENT_URL}/verify-email?token=${verificationToken}`;
-      await mailService.sendVerificationMail(user.email, verificationUrl);
+      mailService.sendVerificationMail(user.email, verificationUrl);
 
       const accessToken = tokenService.signAccessToken({ userId: user.id });
       const refreshToken = tokenService.signRefreshToken({ userId: user.id });
