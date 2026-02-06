@@ -21,8 +21,8 @@ import {
 } from "@/shared/shadcn/components/ui/table";
 
 interface Filter<TData, TValue> {
-  value: TValue;
   key: keyof TData;
+  value: TValue;
 }
 
 interface Selection<TData> {
