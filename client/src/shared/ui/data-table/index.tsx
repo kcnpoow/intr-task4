@@ -26,7 +26,6 @@ interface Filter<TData, TValue> {
 }
 
 interface Selection<TData> {
-  resetKey: unknown;
   onSelectionChange: (selected: TData[]) => void;
 }
 
@@ -36,6 +35,7 @@ interface Props<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   defaultSortKey?: Extract<keyof TData, string>;
+  resetKey?: unknown;
 }
 
 export const DataTable = <TData, TValue>({
@@ -44,6 +44,7 @@ export const DataTable = <TData, TValue>({
   columns,
   data,
   defaultSortKey,
+  resetKey,
 }: Props<TData, TValue>) => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -82,7 +83,7 @@ export const DataTable = <TData, TValue>({
 
   useEffect(() => {
     setRowSelection({});
-  }, [selection.resetKey]);
+  }, [resetKey]);
 
   useEffect(() => {
     setColumnFilters([{ id: String(filter.key), value: filter.value }]);

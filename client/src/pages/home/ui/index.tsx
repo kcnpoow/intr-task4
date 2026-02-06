@@ -39,9 +39,9 @@ export const Home = () => {
         columns={columns}
         data={data}
         defaultSortKey="lastSeenAt"
+        resetKey={dataUpdatedAt}
         filter={{ value: filter, key: "email" }}
         selection={{
-          resetKey: dataUpdatedAt,
           onSelectionChange: handleSelectionChange,
         }}
       />
